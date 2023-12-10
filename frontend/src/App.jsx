@@ -1,8 +1,21 @@
+import {BrowserRouter,Routes,Route} from 'react-router-dom'
+
+import RegisterPage from './pages/RegisterPage'
+import LoginPage from './pages/LoginPage'
+import Inicio from './pages/Inicio'
 function App(){
   return(
-    <div>
-      <h1 className="text-4xl font-sans">Hola mundo</h1>
-    </div>
+    <BrowserRouter>
+    <Routes>
+      <Route path='/' element={<Inicio/>}/>
+      <Route path='/login' element={<LoginPage/>}/>
+      <Route path='/register' element={<RegisterPage/>}/>
+      <Route path='/profile' element={<h1>Pagina De Inicio</h1>}/>
+    
+    </Routes>
+    </BrowserRouter>
+
+  
   )
 }
 
