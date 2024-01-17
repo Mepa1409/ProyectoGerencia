@@ -28,3 +28,19 @@ export const loginSchema = z.object({
         message: 'Debe tener almenos 6 caracteres'
     })
 })
+
+export const abogadoregisterSchema = z.object({
+    name: z.string({
+        required_error: 'Username is requiered'
+    }),
+    email: z.string({
+        required_error: 'Email is requiered'
+    }).email({
+        message:'Correo Invalido'
+    }),
+    password: z.string({
+        required_error :'La contraseña es requerida'
+    }).min(6,{
+        message: 'Debe tener almenos 6 caracteres'
+    })
+})

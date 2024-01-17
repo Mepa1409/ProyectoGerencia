@@ -4,6 +4,7 @@ function RegisterPage() {
   const { register, handleSubmit } = useForm();
 
   return (
+    
     <div className="bg-white p-4 mx-auto max-w-md mt-8 rounded-md shadow-md">
       <form
         className="flex flex-col gap-4"
