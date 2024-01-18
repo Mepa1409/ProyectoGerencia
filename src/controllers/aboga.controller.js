@@ -82,3 +82,9 @@ export const abogadoprofile =async (req,res) => {
         name : AbogadoFound.name
     })
 }
+
+
+export const getAbogados = async (req,res)=>{
+   const abogados = await Abogado.find() 
+   res.json(abogados)
+}

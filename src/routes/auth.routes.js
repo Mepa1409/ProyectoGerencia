@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import {login,register,logout,profile} from '../controllers/auth.controller.js'
-import {abogadologin,abogadoregister,abogadologout,abogadoprofile} from '../controllers/aboga.controller.js'
+import {abogadologin,abogadoregister,abogadologout,abogadoprofile,getAbogados} from '../controllers/aboga.controller.js'
 import {authRequired} from '../middlewares/validateToken.js'
 import {validateSchema} from '../middlewares/validator.js'
 import {abogadoregisterSchema,registerSchema,loginSchema} from '../schemas/auth.schema.js'
@@ -20,4 +20,5 @@ router.post('/abogadologin',validateSchema(loginSchema),abogadologin)
 router.post('/abogadologout',abogadologout)
 
 router.get('/abogadoprofile',authRequired,abogadoprofile)
+router.get('/allabogados',authRequired,getAbogados)
 export default router
