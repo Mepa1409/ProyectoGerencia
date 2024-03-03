@@ -1,13 +1,14 @@
 import { useForm } from 'react-hook-form';
 import { date } from 'zod';
+import { useEffect } from 'react';
 import { useAuth } from '../context/authContext';
 import {useNavigate} from 'react-router-dom'
 
 function LoginPage() {
   const { register, handleSubmit,formState:{errors}, } = useForm();
 
-  const {signin,errors: signinErrors} = useAuth();
-  
+  const {signin,errors: signinErrors,isAuthenticated} = useAuth();
+  const navigate = useNavigate();
  
 
 
@@ -15,6 +16,18 @@ function LoginPage() {
     const onSubmit=handleSubmit((data)=>{
         signin(data)
     })
+
+    useEffect(() => {
+      if (isAuthenticated) {
+        navigate("/abogadoslist");
+      }
+    }, [isAuthenticated]);
+  
+
+
+
+
+
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="bg-blue-200 border border-blue-300 p-8 rounded-md shadow-md w-full sm:w-96">
