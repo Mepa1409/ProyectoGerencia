@@ -1,0 +1,43 @@
+import React, { createContext, useState, useContext } from 'react';
+import { registerRequest } from '../../api/auth';
+
+export const AuthContext = createContext();
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const signup = async (userData) => {
+    try {
+      const res = await registerRequest(userData);
+      console.log(res.data);
+      setUser(res.data);
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.log(error);
+    }
+    };
+    return (
+        <AuthContext.Provider
+          value={{
+            user,
+            signup,
+            isAuthenticated
+        }}
+        >
+          {children}
+        </AuthContext.Provider>
+      );
+    
+  };
+
+export default AuthContext;
+   
