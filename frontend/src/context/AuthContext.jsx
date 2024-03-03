@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext } from 'react';
-import { registerRequest } from '../../api/auth';
+import { registerRequest,loginRequest } from '../../api/auth';
+import { array } from 'zod';
 
 export const AuthContext = createContext();
 
@@ -27,13 +28,27 @@ export const AuthProvider = ({ children }) => {
       setErrors(error.response.data)
     }
     };
+
+    const signin = async (userData) =>{
+      try {
+        const res = await loginRequest(userData)
+       
+      } catch (error) {
+        if(Array.isArray(error.response.data))
+       return setErrors(error.response.data)
+       setErrors([error.response.data.message])
+      }
+      
+    }
+  
     return (
         <AuthContext.Provider
           value={{
             user,
             signup,
             isAuthenticated,
-            errors
+            errors,
+            signin
         }}
         >
           {children}

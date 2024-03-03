@@ -12,7 +12,7 @@ export const registerSchema = z.object({
     password: z.string({
         required_error :'La contraseña es requerida'
     }).min(6,{
-        message: 'Debe tener almenos 6 caracteres'
+        message: 'La contraseña Debe tener almenos 6 caracteres'
     })
 })
 
@@ -25,7 +25,7 @@ export const loginSchema = z.object({
     password: z.string({
         required_error :'La contraseña es requerida'
     }).min(6,{
-        message: 'Debe tener almenos 6 caracteres'
+        message: 'La contraseña debe tener almenos 6 caracteres'
     })
 })
 
