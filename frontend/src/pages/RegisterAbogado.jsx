@@ -5,7 +5,7 @@ import {useNavigate} from 'react-router-dom'
 
 function RegisterAbogados() {
     const { register, handleSubmit,formState:{errors} , } = useForm();
-    const {signup,isAuthenticated, errors:RegisterErrors} =useAuth(); 
+    const {signupAbogado,isAuthenticated, errors:RegisterErrors} =useAuth(); 
     const navigate =useNavigate()
   
     useEffect(()=>{
@@ -13,7 +13,8 @@ function RegisterAbogados() {
     },[isAuthenticated])
   
     const onSubmit = handleSubmit(async (values) => {
-    signup(values)
+        console.log(values)
+    signupAbogado(values)
     });
   
     return (
@@ -33,13 +34,13 @@ function RegisterAbogados() {
               <label className="block text-gray-600 text-sm">Nombre</label>
               <input
                 type="text"
-                {...register('username', { required: true })}
+                {...register('name', { required: true })}
                 className="form-input w-full"
               />
               {
-              errors.username && (
+              errors.name && (
                 <p className='text-red-500'>
-                Username is required
+                name is required
                 </p>
               )   
               }

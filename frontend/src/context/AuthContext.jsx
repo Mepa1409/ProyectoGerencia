@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
-import { registerRequest,loginRequest } from '../../api/auth';
+import { registerRequest,loginRequest,registerAbogaRequest } from '../../api/auth';
 import { array } from 'zod';
 
 export const AuthContext = createContext();
@@ -28,6 +28,17 @@ export const AuthProvider = ({ children }) => {
       setErrors(error.response.data)
     }
     };
+    const signupAbogado = async (AbogaData) => {
+      try {
+        const res = await registerAbogaRequest(AbogaData);
+        console.log(res.data);
+        setUser(res.data);
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.log(error);
+        setErrors(error.response.data)
+      }
+      };
 
     const signin = async (userData) =>{
       try {
@@ -49,7 +60,8 @@ export const AuthProvider = ({ children }) => {
             signup,
             isAuthenticated,
             errors,
-            signin
+            signin,
+            signupAbogado,
         }}
         >
           {children}

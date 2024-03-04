@@ -6,6 +6,9 @@ export const abogadoregister = async(req,res) =>{
     const {name,email,phone,category,password} =req.body
 
     try {
+        const AbogadoFound =await Abogado.findOne({email});
+        if(AbogadoFound)
+        return res.status(400).json(["El correo ya está en uso"])
         const passwordHash = await bcryptjs.hash(password,10)
 
         const newAbogado = new Abogado({
