@@ -25,9 +25,6 @@ function LoginPage() {
   
 
 
-
-
-
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="bg-blue-200 border border-blue-300 p-8 rounded-md shadow-md w-full sm:w-96">

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Inicio() {
   return (
@@ -11,11 +12,22 @@ function Inicio() {
       <section style={{ padding: '50px', textAlign: 'center' }}>
         <h2 style={{ fontSize: '2em', color: '#333' }}>Bienvenido a legalCONNECT</h2>
         <p style={{ fontSize: '1.3em', color: '#666' }}>La plataforma que simplifica la conexión entre abogados y clientes. Encuentra el abogado adecuado para tus necesidades legales o amplía tu práctica legal llegando a nuevos clientes.</p>
-        <p style={{ fontSize: '1.2em' }}><a href="#contacto" style={{ color: '#3498db', textDecoration: 'none' }}>Contáctanos</a> para obtener más información.</p>
+        <p style={{ fontSize: '1.2em' }}>
+          <Link to="/login" style={{ marginRight: '10px', color: '#3498db', textDecoration: 'none' }}>
+            Iniciar Sesión
+          </Link>
+          <Link to="/register" style={{ marginRight: '10px', color: '#3498db', textDecoration: 'none' }}>
+            Registro de Usuario
+          </Link>
+          <Link to="/registerAbogados" style={{ color: '#3498db', textDecoration: 'none' }}>
+            Registro de Abogado
+          </Link>
+        </p>
+       
       </section>
 
       <footer style={{ backgroundColor: '#2c3e50', color: '#fff', textAlign: 'center', padding: '20px', position: 'fixed', bottom: '0', width: '100%' }}>
-        <p style={{ fontSize: '1.2em' }}>&copy; 2023 legalCONNECT. Todos los derechos reservados.</p>
+        <p style={{ fontSize: '1.2em' }}>&copy; 2024 legalCONNECT. Todos los derechos reservados.</p>
       </footer>
     </div>
   );
