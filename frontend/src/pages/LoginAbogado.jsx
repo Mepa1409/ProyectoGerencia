@@ -4,17 +4,17 @@ import { useEffect } from 'react';
 import { useAuth } from '../context/authContext';
 import {useNavigate} from 'react-router-dom'
 
-function LoginPage() {
+function loginAbogado() {
   const { register, handleSubmit,formState:{errors}, } = useForm();
 
-  const {signin,errors: signinErrors,isAuthenticated} = useAuth();
+  const {signinAbogado,errors: signinErrors,isAuthenticated} = useAuth();
   const navigate = useNavigate();
  
 
 
 
     const onSubmit=handleSubmit((data)=>{
-        signin(data)
+        signinAbogado(data)
     })
 
     useEffect(() => {
@@ -35,7 +35,7 @@ function LoginPage() {
           </div>
         ))
       }
-        <h2 className="text-2xl font-bold mb-4">Inicio de Sesión Usuario</h2>
+        <h2 className="text-2xl font-bold mb-4">Inicio de Sesión Abogados</h2>
         <form
           className="flex flex-col gap-4"
           onSubmit={onSubmit}
@@ -84,4 +84,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default loginAbogado;
