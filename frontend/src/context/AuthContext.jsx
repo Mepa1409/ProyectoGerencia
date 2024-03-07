@@ -1,7 +1,7 @@
-import React, { createContext, useState, useContext } from 'react';
-import { registerRequest,loginRequest,registerAbogaRequest, loginRequestAbogado } from '../../api/auth';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { registerRequest,loginRequest,registerAbogaRequest, loginRequestAbogado,getAbogadosData,verifyTokenRequest } from '../../api/auth';
 import { array } from 'zod';
-
+import Cookies from 'js-cookie'
 export const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -16,6 +16,8 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors,setErrors] = useState([])
+  const [loading,setLoading] = useState(true)
+  const [Abogados,setAbogados] = useState([])
 
   const signup = async (userData) => {
     try {
@@ -64,6 +66,39 @@ export const AuthProvider = ({ children }) => {
       }
       
     }
+    const getAbogados = async () => {
+     const res = await getAbogadosData()
+     setAbogados(res.data)
+     console.log(res)
+  
+};
+
+useEffect(() => {
+  const checkLogin = async () => {
+    const cookies = Cookies.get();
+    if (!cookies.token) {
+      setIsAuthenticated(false);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const res = await verifyTokenRequest(cookies.token);
+      console.log(res);
+      if (!res.data) return setIsAuthenticated(false);
+      setIsAuthenticated(true);
+      setUser(res.data);
+      setLoading(false);
+    } catch (error) {
+      setIsAuthenticated(false);
+      setLoading(false);
+    }
+  };
+  checkLogin();
+}, []);
+
+
+
     return (
         <AuthContext.Provider
           value={{
@@ -74,6 +109,9 @@ export const AuthProvider = ({ children }) => {
             signin,
             signupAbogado,
             signinAbogado,
+            getAbogados,
+            loading,
+            Abogados,
         }}
         >
           {children}

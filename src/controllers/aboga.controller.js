@@ -87,7 +87,18 @@ export const abogadoprofile =async (req,res) => {
 }
 
 
-export const getAbogados = async (req,res)=>{
-   const abogados = await Abogado.find() 
-   res.json(abogados)
-}
+export const getAbogados = async (req, res) => {
+    try {
+      const abogados = await Abogado.find();
+  
+      // Verificar si abogados es un array y tiene al menos un elemento
+      if (Array.isArray(abogados) && abogados.length > 0) {
+        res.json(abogados);
+      } else {
+        res.status(404).json({ message: 'No se encontraron abogados.' });
+      }
+    } catch (error) {
+      console.error('Error al obtener abogados:', error);
+      res.status(500).json({ message: 'Error interno del servidor.' });
+    }
+  };

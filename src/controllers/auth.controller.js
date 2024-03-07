@@ -1,6 +1,8 @@
 import User from '../models/usermodel.js'
+import jwt from "jsonwebtoken";
 import bcryptjs from 'bcryptjs'
 import { CreateAccesToken } from '../libs/jwt.js'
+import { TOKEN_SECRET } from "../config.js";
 
 export const register = async(req,res) =>{
     const {username,email,phone,password} =req.body
@@ -86,3 +88,27 @@ export const profile =async (req,res) => {
         username : userFound.username
     })
 }
+
+
+
+
+
+export const verifyToken = async (req, res) => {
+    const { token } = req.cookies;
+    if (!token) return res.send(false);
+  
+    jwt.verify(token, TOKEN_SECRET, async (error, user) => {
+      if (error) return res.sendStatus(401);
+  
+      const userFound = await User.findById(user.id);
+      if (!userFound) return res.sendStatus(401);
+  
+      return res.json({
+        id: userFound._id,
+        username: userFound.username,
+        email: userFound.email,
+      });
+    });
+  };
+  
+  
