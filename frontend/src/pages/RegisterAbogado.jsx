@@ -9,7 +9,7 @@ function RegisterAbogados() {
     const navigate =useNavigate()
   
     useEffect(()=>{
-      if(isAuthenticated) navigate("/abogadoslist")
+      if(isAuthenticated) navigate("/bienvenida")
     },[isAuthenticated])
   
     const onSubmit = handleSubmit(async (values) => {

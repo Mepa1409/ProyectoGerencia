@@ -7,6 +7,7 @@ import RegisterAbogados from './pages/RegisterAbogado'
 import LoginAbogado from './pages/LoginAbogado'
 import AbogadosList from './pages/AbogadosList'
 import ProtectedRoute from './ProtectedRoute'
+import Bienvenida from './pages/Bienvenida'
 function App(){
   return(
 
@@ -19,6 +20,7 @@ function App(){
       <Route path='/registerAbogados' element={<RegisterAbogados/>}/>
       <Route path='/profile' element={<h1>Pagina De Inicio</h1>}/>
       <Route path='/loginAbogado' element={<LoginAbogado/>}/>
+      <Route path='/bienvenida' element={<Bienvenida/>}/>
     <Route element={<ProtectedRoute/>}>
     <Route path='/abogadoslist' element={<AbogadosList/>}/> 
 
