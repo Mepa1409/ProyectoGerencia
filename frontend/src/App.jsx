@@ -10,7 +10,7 @@ import ProtectedRoute from './ProtectedRoute'
 import Bienvenida from './pages/Bienvenida'
 function App(){
   return(
-
+      // RUTA DE LOS ENDPOINTS
     <AuthProvider>
         <BrowserRouter>
     <Routes>
