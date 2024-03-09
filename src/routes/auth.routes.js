@@ -19,9 +19,9 @@ router.post('/abogadoregister',validateSchema(abogadoregisterSchema),abogadoregi
 router.post('/abogadologin',validateSchema(loginSchema),abogadologin)
 router.post('/abogadologout',abogadologout)
 
-router.get('/abogadoprofile',authRequired,abogadoprofile)
-router.get('/allabogados',authRequired,getAbogados)
+router.get('/abogadoprofile',authRequired, abogadoprofile)
+router.get('/allabogados',authRequired, getAbogados)
 
 
-router.get("/verify", verifyToken);
+router.get("/verify", authRequired, verifyToken);
 export default router

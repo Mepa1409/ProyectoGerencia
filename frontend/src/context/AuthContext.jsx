@@ -1,7 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { registerRequest,loginRequest,registerAbogaRequest, loginRequestAbogado,getAbogadosData,verifyTokenRequest } from '../../api/auth';
-import { array } from 'zod';
-import Cookies from 'js-cookie'
 export const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -23,6 +21,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await registerRequest(userData);
       console.log(res.data);
+      localStorage.setItem('token', res.data.token);
       setUser(res.data);
       setIsAuthenticated(true);
     } catch (error) {
@@ -34,6 +33,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const res = await registerAbogaRequest(AbogaData);
         console.log(res.data);
+        localStorage.setItem('token', res.data.token);
         setUser(res.data);
         setIsAuthenticated(true);
       } catch (error) {
@@ -46,6 +46,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const res = await loginRequest(userData)
         setUser(res.data);
+        localStorage.setItem('token', res.data.token)
         setIsAuthenticated(true);
       
       } catch (error) {
@@ -59,6 +60,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const res = await loginRequestAbogado(AbogaData)
         setUser(res.data);
+        localStorage.setItem('token', res.data.token)
         setIsAuthenticated(true);
       } catch (error) {
         if(Array.isArray(error.response.data))
@@ -68,28 +70,26 @@ export const AuthProvider = ({ children }) => {
       
     }
     const getAbogados = async () => {
-     const res = await getAbogadosData()
-     setAbogados(res.data)
-     console.log(res)
-  
-};
+      const res = await getAbogadosData()
+      setAbogados(res.data)
+      console.log(res)
+    };
 
 useEffect(() => {
  
  const checkLogin = async () => {
     
-  
-    const cookies = Cookies.get();
-    window.localStorage.setItem('Token:' , cookies.token)
-    if (!cookies.token) {
+    const token = localStorage.getItem('token');
+   
+    if (!token) {
       setIsAuthenticated(false);
       setLoading(false);
       return;
     }
 
     try {
-      const res = await verifyTokenRequest(cookies.token);
-      console.log(res);
+      const res = await verifyTokenRequest(token);
+      
       if (!res.data) return setIsAuthenticated(false);
       setIsAuthenticated(true);
       setUser(res.data);

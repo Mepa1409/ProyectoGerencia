@@ -8,7 +8,6 @@ export const register = async(req,res) =>{
     const {username,email,phone,password} =req.body
 
     try {
-
         const userFound =await User.findOne({email});
         if(userFound)
         return res.status(400).json(["El correo ya está en uso"])
@@ -22,17 +21,16 @@ export const register = async(req,res) =>{
             password : passwordHash
         })
         const UserSaved = await newUser.save()
-        const token = await CreateAccesToken({ id : UserSaved.id})
-        res.cookie("token",token)
+        const token = CreateAccesToken({ id : UserSaved.id})
         
        
           res.json({
             id: UserSaved.id,
             username: UserSaved.username,
-            email: UserSaved.email
+            email: UserSaved.email,
+            token
         })
         
-       
     } catch (error) {
         console.log(error)
     }
@@ -54,15 +52,13 @@ export const login = async(req,res) =>{
 
         })
        
-        const token = await CreateAccesToken({ id : userFound.id})
-        res.cookie("token",token)
-        //localStorage.setItem("token", token);
-
+        const token = CreateAccesToken({ id : userFound.id})
         
           res.json({
             id: userFound.id,
             username: userFound.username,
-            email: userFound.email
+            email: userFound.email,
+            token
         })
         
        
@@ -81,14 +77,15 @@ export const logout =(req,res)=>{
 }
 
 
-export const profile =async (req,res) => {
-    const userFound=await User.findById(req.user.id)
+export const profile = async (req,res) => {
+    const userFound = await User.findById(req.user.id)
+
     if(!userFound) return res.status(400).json({
         message : "Usuario no encontrado"
     })
     return res.json({
         id: userFound._id,
-        username : userFound.username
+        username : userFound.username,
     })
 }
 
@@ -97,21 +94,19 @@ export const profile =async (req,res) => {
 
 
 export const verifyToken = async (req, res) => {
-    const { token } = req.cookies;
-    if (!token) return res.send(false);
-  
-    jwt.verify(token, TOKEN_SECRET, async (error, user) => {
-      if (error) return res.sendStatus(401);
-  
-      const userFound = await User.findById(user.id);
-      if (!userFound) return res.sendStatus(401);
-  
-      return res.json({
+    const {id} = req.user
+    
+    const userFound = await User.findById(id)
+
+    if(!userFound) return res.status(400).json({
+        message : "Usuario no encontrado"
+    })
+
+    return res.json({
         id: userFound._id,
-        username: userFound.username,
-        email: userFound.email,
-      });
-    });
-  };
+        username : userFound.username,
+        email : userFound.email
+    })
+};
   
   
