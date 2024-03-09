@@ -24,6 +24,7 @@ export const register = async(req,res) =>{
         const UserSaved = await newUser.save()
         const token = await CreateAccesToken({ id : UserSaved.id})
         res.cookie("token",token)
+        
        
           res.json({
             id: UserSaved.id,
@@ -55,7 +56,9 @@ export const login = async(req,res) =>{
        
         const token = await CreateAccesToken({ id : userFound.id})
         res.cookie("token",token)
-       
+        //localStorage.setItem("token", token);
+
+        
           res.json({
             id: userFound.id,
             username: userFound.username,
