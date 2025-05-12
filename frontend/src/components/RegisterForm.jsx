@@ -1,0 +1,177 @@
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import {
+  EnvelopeIcon,
+  EyeIcon,
+  KeyIcon,
+  EyeSlashIcon,
+  UserIcon,
+  CreditCardIcon,
+  PhoneIcon,
+} from "@heroicons/react/24/outline";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
+const RegisterForm = ({ hola }) => {
+  const [showPass, setShowPass] = useState(false);
+  const { register, handleSubmit } = useForm();
+  const { signup, signupAbogado, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  const specialties = [
+    "Derecho Civil",
+    "Derecho Penal",
+    "Derecho Laboral",
+    "Derecho Familiar",
+    "Derecho Corporativo",
+    "Derecho Fiscal",
+    "Derecho Administrativo",
+    "Derecho Internacional",
+    "Derecho Inmobiliario",
+    "Derecho Ambiental",
+    "Derecho de Propiedad Intelectual",
+    "Derecho de la Salud",
+    "Derecho de Familia y Sucesiones",
+    "Derecho de las Tecnologías de la Información",
+    "Derecho Marítimo",
+  ];
+
+  const handleShowPass = () => {
+    setShowPass(!showPass);
+  };
+
+  const onSubmit = handleSubmit(async (data) => {
+    console.log("Cuenta creada pa");
+    if (hola === "Abogado") {
+      signupAbogado(data);
+    } else {
+      signup(data);
+    }
+  });
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (hola === "Abogado") {
+        navigate("/bienvenida");
+      } else {
+        navigate("/abogadoslist");
+      }
+    }
+  }, [isAuthenticated]);
+
+  return (
+    <div className="bg-white p-8 rounded-lg w-full md:w-96 z-10">
+      <div className="mb-10">
+        <h1 className="text-3xl uppercase font-bold text-center">
+          Crear cuenta {hola}
+        </h1>
+      </div>
+      <form onSubmit={onSubmit} className="flex flex-col gap-4 text-gray-500">
+        <div className="relative">
+          <UserIcon className="w-5 absolute left-2 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Nombre"
+            className="w-full border border-gray-200 outline-none py-2 px-8 rounded-lg"
+            {...(hola === "Abogado"
+              ? { ...register("name", { required: true }) }
+              : { ...register("username", { required: true }) })}
+          />
+        </div>
+        <div className="relative">
+          <EnvelopeIcon className="w-5 absolute left-2 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input
+            type="email"
+            placeholder="Correo Electrónico"
+            className="w-full border border-gray-200 outline-none py-2 px-8 rounded-lg"
+            {...register("email", { required: true })}
+          />
+        </div>
+        <div className="relative">
+          <PhoneIcon className="w-5 absolute left-2 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input
+            type="number"
+            placeholder="Numero de telefono"
+            className="w-full border border-gray-200 outline-none py-2 px-8 rounded-lg"
+            {...register("phone", { required: true })}
+          />
+        </div>
+        {hola == "Abogado" && (
+          <>
+            <div className="relative">
+              <CreditCardIcon className="w-5 absolute left-2 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="number"
+                placeholder="Numero de tarjeta profesional"
+                className="w-full border border-gray-200 outline-none py-2 px-8 rounded-lg"
+              />
+            </div>
+            <div className="relative">
+              <EnvelopeIcon className="w-5 absolute left-2 top-1/2 -translate-y-1/2 text-gray-400" />
+              <select
+                className="w-full border border-gray-200 outline-none py-2 px-8 rounded-lg"
+                {...register("category", { required: true })}
+              >
+                <option value="" disabled>
+                  Selecciona una especialidad
+                </option>
+                {specialties.map((specialty, index) => (
+                  <option key={index} value={specialty}>
+                    {specialty}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </>
+        )}
+        <div className="relative">
+          <KeyIcon className="w-5 absolute left-2 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input
+            type={showPass ? "text" : "password"}
+            placeholder="Contraseña"
+            {...register("password", { required: true })}
+            className="w-full border border-gray-200 outline-none py-2 px-8 rounded-lg"
+          />
+          {showPass ? (
+            <EyeSlashIcon
+              onClick={handleShowPass}
+              className="w-5 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:cursor-pointer"
+            />
+          ) : (
+            <EyeIcon
+              onClick={handleShowPass}
+              className="w-5 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:cursor-pointer"
+            />
+          )}
+        </div>
+        <div className="flex gap-2 justify-center mt-2">
+          <button
+            type="submit"
+            className="uppercase bg-[#2C3E50] text-white w-full py-2 px-6 rounded-lg hover:scale-105 hover:bg-[#344c63] transition-all"
+          >
+            Crear Cuenta
+          </button>
+          <button
+            type="button"
+            className="uppercase bg-[#2C3E50] text-white w-full py-2 px-6 rounded-lg hover:scale-105 hover:bg-[#344c63] transition-all"
+            onClick={() => navigate("/login")}
+          >
+            Iniciar Sesión
+          </button>
+        </div>
+        <div>
+          <Link
+            to="/"
+            type="button"
+            className="uppercase text-center bg-[#2C3E50] text-white w-full py-2 px-6 rounded-lg hover:scale-105 hover:bg-[#344c63] transition-all"
+          >
+            Atras
+          </Link>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default RegisterForm;

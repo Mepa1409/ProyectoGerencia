@@ -1,5 +1,13 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import { registerRequest,loginRequest,registerAbogaRequest, loginRequestAbogado,getAbogadosData,verifyTokenRequest } from '../../api/auth';
+import React, { createContext, useState, useContext, useEffect } from "react";
+import {
+  registerRequest,
+  loginRequest,
+  registerAbogaRequest,
+  loginRequestAbogado,
+  getAbogadosData,
+  getAbogadoByCategoryRequest,
+  verifyTokenRequest,
+} from "../../api/auth";
 export const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -13,117 +21,125 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [errors,setErrors] = useState([])
-  const [loading,setLoading] = useState(true)
-  const [Abogados,setAbogados] = useState([])
+  const [errors, setErrors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [Abogados, setAbogados] = useState([]);
 
   const signup = async (userData) => {
     try {
       const res = await registerRequest(userData);
       console.log(res.data);
-      localStorage.setItem('token', res.data.token);
+      localStorage.setItem("token", res.data.token);
       setUser(res.data);
       setIsAuthenticated(true);
     } catch (error) {
       console.log(error);
-      setErrors(error.response.data)
+      setErrors(error.response.data);
     }
-    };
-    const signupAbogado = async (AbogaData) => {
-      try {
-        const res = await registerAbogaRequest(AbogaData);
-        console.log(res.data);
-        localStorage.setItem('token', res.data.token);
-        setUser(res.data);
-        setIsAuthenticated(true);
-      } catch (error) {
-        console.log(error);
-        setErrors(error.response.data)
-      }
-      };
+  };
 
-    const signin = async (userData) =>{
-      try {
-        const res = await loginRequest(userData)
-        setUser(res.data);
-        localStorage.setItem('token', res.data.token)
-        setIsAuthenticated(true);
-      
-      } catch (error) {
-        if(Array.isArray(error.response.data))
-       return setErrors(error.response.data)
-       setErrors([error.response.data.message])
-      }
-      
-    }
-    const signinAbogado = async (AbogaData) =>{
-      try {
-        const res = await loginRequestAbogado(AbogaData)
-        setUser(res.data);
-        localStorage.setItem('token', res.data.token)
-        setIsAuthenticated(true);
-      } catch (error) {
-        if(Array.isArray(error.response.data))
-       return setErrors(error.response.data)
-       setErrors([error.response.data.message])
-      }
-      
-    }
-    const getAbogados = async () => {
-      const res = await getAbogadosData()
-      setAbogados(res.data)
-      console.log(res)
-    };
-
-useEffect(() => {
- 
- const checkLogin = async () => {
-    
-    const token = localStorage.getItem('token');
-   
-    if (!token) {
-      setIsAuthenticated(false);
-      setLoading(false);
-      return;
-    }
-
+  const signupAbogado = async (AbogaData) => {
     try {
-      const res = await verifyTokenRequest(token);
-      
-      if (!res.data) return setIsAuthenticated(false);
-      setIsAuthenticated(true);
+      const res = await registerAbogaRequest(AbogaData);
+      console.log(res.data);
+      localStorage.setItem("token", res.data.token);
       setUser(res.data);
-      setLoading(false);
+      setIsAuthenticated(true);
     } catch (error) {
-      setIsAuthenticated(false);
-      setLoading(false);
+      console.log(error);
+      setErrors(error.response.data);
     }
   };
-  checkLogin();
-}, []);
 
-
-
-    return (
-        <AuthContext.Provider
-          value={{
-            user,
-            signup,
-            isAuthenticated,
-            errors,
-            signin,
-            signupAbogado,
-            signinAbogado,
-            getAbogados,
-            loading,
-            Abogados,
-        }}
-        >
-          {children}
-        </AuthContext.Provider>
-      );
-    
+  const signin = async (userData) => {
+    try {
+      const res = await loginRequest(userData);
+      setUser(res.data);
+      localStorage.setItem("token", res.data.token);
+      setIsAuthenticated(true);
+    } catch (error) {
+      if (Array.isArray(error.response.data)) return setErrors(error.response.data);
+      setErrors([error.response.data.message]);
+    }
   };
+
+  const signinAbogado = async (AbogaData) => {
+    try {
+      const res = await loginRequestAbogado(AbogaData);
+      setUser(res.data);
+      localStorage.setItem("token", res.data.token);
+      setIsAuthenticated(true);
+    } catch (error) {
+      if (Array.isArray(error.response.data)) return setErrors(error.response.data);
+      setErrors([error.response.data.message]);
+    }
+  };
+
+  const getAbogados = async () => {
+    const res = await getAbogadosData();
+    setAbogados(res.data);
+  };
+
+  const getAbogado = async (category) => {
+    try {
+      const res = await getAbogadoByCategoryRequest(category);
+      setAbogados(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+    setUser(null);
+  };
+
+  useEffect(() => {
+    const checkLogin = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setIsAuthenticated(false);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await verifyTokenRequest(token);
+
+        if (!res.data) return setIsAuthenticated(false);
+        setIsAuthenticated(true);
+        setUser(res.data);
+        setLoading(false);
+      } catch (error) {
+        setIsAuthenticated(false);
+        setLoading(false);
+      }
+    };
+    checkLogin();
+  }, []);
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        signup,
+        isAuthenticated,
+        errors,
+        signin,
+        logout,
+        signupAbogado,
+        signinAbogado,
+        getAbogados,
+        getAbogado,
+        loading,
+        Abogados,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
 export default AuthContext;
-   

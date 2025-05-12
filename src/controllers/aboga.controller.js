@@ -102,3 +102,30 @@ export const getAbogados = async (req, res) => {
       res.status(500).json({ message: 'Error interno del servidor.' });
     }
   };
+
+  export async function findAbogadoByCategory(req, res) {
+    try {
+      const { category } = req.params;
+      console.log(`Buscando abogados en la categoría: ${category}`); // Agrega esto para depurar
+      const dataAbogado = await Abogado.find({ category });
+      console.log(`Abogados encontrados: ${JSON.stringify(dataAbogado)}`); // Agrega esto para depurar
+      if (dataAbogado.length > 0) {
+        return res.status(200).json({
+          status: true,
+          data: dataAbogado,
+        });
+      } else {
+        return res.status(404).json({
+          status: false,
+          message: "No se encontraron abogados en esta categoría",
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        error: error.message,
+        message: "Error al buscar abogados",
+      });
+    }
+  }
+  

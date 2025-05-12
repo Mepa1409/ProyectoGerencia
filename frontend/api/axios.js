@@ -8,10 +8,9 @@ const instance = () => {
     if(authToken && authToken !== '') headers['Authorization'] = `Bearer ${authToken}`
 
     return axios.create({
-    baseURL: 'https://proyectogerencia.onrender.com/api',
-    //baseURL: 'http://localhost:3001/api',
+        baseURL: 'http://localhost:3001/api',
         headers
     })
 }
 
-export default instance
+export default instance;
