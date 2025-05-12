@@ -1,6 +1,6 @@
 import instance from "./axios";
 
-const API = 'http://localhost:3001/api';
+const API = 'https://proyectogerencia.onrender.com/api';
 
 export const registerRequest = async (user) => await instance().post(`/register`, user);
 export const registerAbogaRequest = async (abogado) => await instance().post(`/abogadoregister`, abogado);
